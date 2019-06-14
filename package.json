@@ -1,0 +1,17 @@
+{
+  "name": "uptask",
+  "version": "1.0.0",
+  "description": "UpTask con Node y MVC",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "author": "Fernando Guevara",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
