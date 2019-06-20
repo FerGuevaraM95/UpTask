@@ -4,3 +4,33 @@ exports.proyectosHome = (req, res) => {
         nombrePagina: 'Proyectos'
     });
 }
+
+exports.formularioProyecto = (req, res) => {
+    res.render('nuevoProyecto', {
+        nombrePagina: 'Nuevo Proyecto'
+    });
+}
+
+exports.nuevoProyecto = (req, res) => {
+    // console.log(req.body);
+
+    const { nombre } = req.body;
+
+    let errores = [];
+
+    if(!nombre) {
+        errores.push({'texto': 'Agrega un Nombre al Proyecto'});
+    }
+
+    // Si hay errores
+    if(errores.length > 0) {
+        res.render('nuevoProyecto', {
+            nombrePagina: 'Nuevo Proyecto',
+            errores
+        });
+    } else {
+        // No hay errores
+        // Insertar en la DB
+        
+    }
+}

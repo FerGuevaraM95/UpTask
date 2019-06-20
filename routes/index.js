@@ -8,6 +8,10 @@ const proyectosController = require
 module.exports = function() {
     // Ruta para el home
     router.get('/', proyectosController.proyectosHome);
+    // Ruta nuevo proyecto
+    router.get('/nuevo-proyecto', proyectosController.formularioProyecto);
+    // Ruta postear proyecto
+    router.post('/nuevo-proyecto', proyectosController.nuevoProyecto);
 
     return router;
 }

@@ -1,6 +1,17 @@
 const express = require('express');
 const path = require('path');
+const bodyParser =require('body-parser');
 const routes = require('./routes');
+
+// Conectar la DB
+const db = require('./config/db');
+
+// Importar el modelo
+require('./models/Proyectos');
+
+db.sync()
+    .then(() => console.log('Conectado al servidor'))
+    .catch(error => console.error(error));
 
 // Crear una app de express
 const app = express();
@@ -13,6 +24,9 @@ app.set('view engine', 'pug');
 
 // Añadir la carpeta de las vistas
 app.set('views', path.join(__dirname, './views'));
+
+// Habilitar bodyParser para leer datos del formulario
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Enrutador
 app.use('/', routes());
