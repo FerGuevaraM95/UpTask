@@ -16,7 +16,10 @@ module.exports = function() {
     // Ruta postear proyecto
     router.post('/nuevo-proyecto',
         body('nombre').not().isEmpty().trim().escape(),
-        proyectosController.nuevoProyecto);
+        proyectosController.nuevoProyecto
+    );
+    // Listar Proyectos
+    router.get('/proyectos/:url', proyectosController.proyectoPorUrl);
 
     return router;
 }
