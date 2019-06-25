@@ -40,19 +40,22 @@ exports.nuevoProyecto = async (req, res) => {
     } else {
         // No hay errores
         // Insertar en la DB
-        const proyecto = await Proyectos.create({ nombre });
+        await Proyectos.create({ nombre });
         res.redirect('/');
     }
 }
 
 exports.proyectoPorUrl = async (req, res, next) => {
-    const proyectos = await Proyectos.findAll();
+    const proyectosPromise = Proyectos.findAll();
 
-    const proyecto = await Proyectos.findOne({
+    const proyectoPromise = Proyectos.findOne({
         where: {
             url: req.params.url
         }
     });
+
+    const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
+
     if(!proyecto) return next();
 
     // Render a la vista
@@ -61,4 +64,52 @@ exports.proyectoPorUrl = async (req, res, next) => {
         proyecto,
         proyectos
     })
+}
+
+exports.formularioEditar = async (req, res) => {
+    const proyectosPromise = Proyectos.findAll();
+
+    const proyectoPromise = Proyectos.findOne({
+        where: {
+            id: req.params.id
+        }
+    });
+
+    const [proyectos, proyecto] = await Promise.all([proyectosPromise, proyectoPromise]);
+
+    // render a la vista
+    res.render('nuevoProyecto', {
+        nombrePagina: 'Editar Proyecto',
+        proyectos,
+        proyecto
+    });
+}
+
+exports.actualizarProyecto = async (req, res) => {
+    const proyectos = await Proyectos.findAll();
+    // console.log(req.body);
+
+    const { nombre } = req.body;
+    let errores = [];
+
+    if (!nombre) {
+        errores.push({ 'texto': 'Agrega un Nombre al Proyecto' });
+    }
+
+    // Si hay errores
+    if (errores.length > 0) {
+        res.render('nuevoProyecto', {
+            nombrePagina: 'Nuevo Proyecto',
+            errores,
+            proyectos
+        });
+    } else {
+        // No hay errores
+        // Insertar en la DB
+        await Proyectos.update(
+            { nombre: nombre },
+            { where: { id: req.params.id }}
+            );
+        res.redirect('/');
+    }
 }
