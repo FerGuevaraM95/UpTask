@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt-nodejs');
 const db = require('../config/db');
 const Proyectos = require('../models/Proyectos');
 
@@ -15,6 +16,12 @@ const Usuarios = db.define('usuarios', {
     password: {
         type: Sequelize.STRING(60),
         allowNull: false
+    }
+}, {
+    hooks: {
+        beforeCreate(usuario) {
+            usuario.password = bcrypt.hashSync(usuario.password, bcrypt.genSaltSync(10));
+        }
     }
 });
 
